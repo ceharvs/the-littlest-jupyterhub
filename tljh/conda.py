@@ -100,6 +100,11 @@ def ensure_conda_packages(prefix, packages):
     # Explicitly do *not* capture stderr, since that's not always JSON!
     # Scripting conda is a PITA!
     # FIXME: raise different exception when using
+    /opt/tljh/user/bin/python -m conda config --set ssl_verify False
+    subprocess.check_output(conda_executable + [
+        'config',
+        '--set', 'ssl_verify',  # Make customizable if we ever need to
+        'False'])
     raw_output = subprocess.check_output(conda_executable + [
         'install',
         '-c', 'conda-forge',  # Make customizable if we ever need to
