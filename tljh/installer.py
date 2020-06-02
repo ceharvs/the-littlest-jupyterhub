@@ -266,26 +266,20 @@ def ensure_user_environment(user_requirements_txt_file):
         logger.info('Downloading & setting up user environment...')
         # FIXME: allow using miniforge
         installer_url = "https://repo.continuum.io/miniconda/Miniconda3-{}-Linux-x86_64.sh".format(miniconda_new_version)
-        logger.info('--Checkpoint 1')
         with conda.download_miniconda_installer(installer_url, miniconda_installer_sha256) as installer_path:
-            logger.info('--Checkpoint 1.5')
             conda.install_miniconda(installer_path, USER_ENV_PREFIX)
-        logger.info('--Checkpoint 2')
         conda_version = '4.8.1'
 
-    logger.info('--Checkpoint 3')
     conda.ensure_conda_packages(USER_ENV_PREFIX, [
         # Conda's latest version is on conda much more so than on PyPI.
         'conda==' + conda_version
     ])
     
-    logger.info('--Checkpoint 4')
     conda.ensure_pip_requirements(
         USER_ENV_PREFIX,
         os.path.join(HERE, 'requirements-base.txt'),
     )
 
-    logger.info('--Checkpoint 5')
     if user_requirements_txt_file:
         # FIXME: This currently fails hard, should fail soft and not abort installer
         conda.ensure_pip_requirements(USER_ENV_PREFIX, user_requirements_txt_file)
